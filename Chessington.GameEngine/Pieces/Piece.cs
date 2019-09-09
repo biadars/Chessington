@@ -32,7 +32,7 @@ namespace Chessington.GameEngine.Pieces
                 moves.Add(Square.At(i, position.Col));
                 moves.Add(Square.At(position.Row, i));
             }
-            moves.Remove(position);
+            moves.RemoveAll(move => move == position);
             return moves;
         }
 
