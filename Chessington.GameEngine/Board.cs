@@ -111,6 +111,27 @@ namespace Chessington.GameEngine
                         return false;
                 }
             }
+            return true;
+        }
+
+        public bool isValidDiagonalMove(Square from, Square to)
+        {
+            int x, y;
+            if (from.Row <= to.Row)
+                x = 1;
+            else
+                x = -1;
+            if (from.Col <= to.Col)
+                y = 1;
+            else
+                y = -1;
+            for (Square current = Square.At(from.Row + x, from.Col + y);
+                current != to;
+                current = Square.At(current.Row + x, current.Col + y))
+            {
+                if (InBounds(current) && GetPiece(current) != null)
+                    return false;
+            }
 
             return true;
         }

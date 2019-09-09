@@ -29,14 +29,10 @@ namespace Chessington.GameEngine.Pieces
             Square position = board.FindPiece(this);
             for (int i = 0; i < GameSettings.BoardSize; i++)
             {
-                Square destination = Square.At(i, position.Col);
-                if (board.IsValidLateralMove(position, destination))
-                    moves.Add(destination);
-                destination = Square.At(position.Row, i);
-                if (board.IsValidLateralMove(position, destination))
-                    moves.Add(destination);
+                moves.Add(Square.At(i, position.Col));
+                moves.Add(Square.At(position.Row, i));
             }
-            moves.RemoveAll(move => move == position);
+            moves.RemoveAll(move => move == position || !board.IsValidLateralMove(position, move));
             return moves;
         }
 
@@ -44,11 +40,11 @@ namespace Chessington.GameEngine.Pieces
         {
             List<Square> moves = new List<Square>();
             Square position = board.FindPiece(this);
-            for (int i = (-1 * GameSettings.BoardSize + 1); i < GameSettings.BoardSize; i++)
+            for (int i = (-1 * GameSettings.BoardSize + 1); i < GameSettings.BoardSize; i++) 
                 moves.Add(Square.At(position.Row + i, position.Col + i));
             for (int i = (-1 * GameSettings.BoardSize + 1); i < GameSettings.BoardSize; i++)
                 moves.Add(Square.At(position.Row + i, position.Col - i));
-            moves.RemoveAll(move => move == position || !Board.InBounds(move));
+            moves.RemoveAll(move => move == position || !Board.InBounds(move) || !board.isValidDiagonalMove(position, move));
             return moves;
         }
     }
