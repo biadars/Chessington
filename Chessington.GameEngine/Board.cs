@@ -112,7 +112,7 @@ namespace Chessington.GameEngine
                 }
             }
 
-            return CanTakePiece(from, to);
+            return SquareFreeOrEnemy(from, to);
         }
 
         public bool IsValidDiagonalMove(Square from, Square to)
@@ -134,15 +134,23 @@ namespace Chessington.GameEngine
                     return false;
             }
 
-            return CanTakePiece(from, to);
+            return SquareFreeOrEnemy(from, to);
+        }
+
+        public bool SquareFreeOrEnemy(Square from, Square to)
+        {
+            if (GetPiece(to) != null && GetPiece(to).Player == GetPiece(from).Player)
+                return false;
+            return true;
         }
 
         public bool CanTakePiece(Square from, Square to)
         {
-            if (GetPiece(to) != null && GetPiece(to).Player == GetPiece(from).Player)
+            if (GetPiece(to) == null)
                 return false;
-            else
-                return true;
+            if (GetPiece(to).Player == GetPiece(from).Player)
+                return false;
+            return true;
         }
     }
 }

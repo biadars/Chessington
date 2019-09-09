@@ -24,9 +24,15 @@ namespace Chessington.GameEngine.Pieces
                 if (Board.InBounds(destination) && board.GetPiece(destination) == null)
                 {
                     moves.Add(destination);
+                    destination = Square.At(destination.Row, destination.Col - 1);
+                    if (Board.InBounds(destination) && board.CanTakePiece(position, destination))
+                        moves.Add(destination);
+                    destination = Square.At(destination.Row, destination.Col + 2);
+                    if (Board.InBounds(destination) && board.CanTakePiece(position, destination))
+                        moves.Add(destination);
                     destination = Square.At(position.Row - 2, position.Col);
                     if (!Moved && board.GetPiece(destination) == null)
-                        moves.Add((destination));
+                        moves.Add(destination);
                 }
             }
             else
@@ -34,6 +40,12 @@ namespace Chessington.GameEngine.Pieces
                 Square destination = Square.At(position.Row + 1, position.Col);
                 if (Board.InBounds(destination) && board.GetPiece(destination) == null)
                 {
+                    moves.Add(destination);
+                    destination = Square.At(destination.Row, destination.Col - 1);
+                    if (Board.InBounds(destination) && board.CanTakePiece(position, destination))
+                    moves.Add(destination);
+                    destination = Square.At(destination.Row, destination.Col + 2);
+                    if (Board.InBounds(destination) && board.CanTakePiece(position, destination))
                     moves.Add(destination);
                     destination = Square.At(position.Row + 2, position.Col);
                     if (!Moved && board.GetPiece(destination) == null)
