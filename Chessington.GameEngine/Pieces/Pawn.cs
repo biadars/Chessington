@@ -16,43 +16,33 @@ namespace Chessington.GameEngine.Pieces
 
         public override IEnumerable<Square> GetAvailableMoves(Board board)
         {
-            List < Square > moves = new List<Square>();
-            Square position = board.FindPiece(this);
+            var moves = new List<Square>();
+            var position = board.FindPiece(this);
+            int rowModifier;
             if (Player == Player.White)
-            {
-                Square destination = Square.At(position.Row - 1, position.Col);
-                if (destination.IsInBounds() && board.GetPiece(destination) == null)
-                {
-                    moves.Add(destination);
-                    destination = Square.At(destination.Row, destination.Col - 1);
-                    if (destination.IsInBounds() && board.CanTakePiece(position, destination))
-                        moves.Add(destination);
-                    destination = Square.At(destination.Row, destination.Col + 2);
-                    if (destination.IsInBounds() && board.CanTakePiece(position, destination))
-                        moves.Add(destination);
-                    destination = Square.At(position.Row - 2, position.Col);
-                    if (!Moved && board.GetPiece(destination) == null)
-                        moves.Add(destination);
-                }
-            }
+                rowModifier = -1;
             else
+                rowModifier = 1;
+            var destination = Square.At(position.Row + rowModifier, position.Col);
+            if (destination.IsInBounds())
             {
-                Square destination = Square.At(position.Row + 1, position.Col);
-                if (destination.IsInBounds() && board.GetPiece(destination) == null)
-                {
+                AddDiagonalMove(board, moves, Square.At(destination.Row, destination.Col - 1));
+                AddDiagonalMove(board, moves, Square.At(destination.Row, destination.Col + 1));
+                if (board.GetPiece(destination) != null)
+                    return moves;
+                moves.Add(destination);
+                destination = Square.At(position.Row + 2 * rowModifier, position.Col);
+                if (!Moved && board.GetPiece(destination) == null)
                     moves.Add(destination);
-                    destination = Square.At(destination.Row, destination.Col - 1);
-                    if (destination.IsInBounds() && board.CanTakePiece(position, destination))
-                    moves.Add(destination);
-                    destination = Square.At(destination.Row, destination.Col + 2);
-                    if (destination.IsInBounds() && board.CanTakePiece(position, destination))
-                    moves.Add(destination);
-                    destination = Square.At(position.Row + 2, position.Col);
-                    if (!Moved && board.GetPiece(destination) == null)
-                        moves.Add((destination));
-                }
             }
+            return moves;
+        }
 
+        private IEnumerable<Square> AddDiagonalMove(Board board, List<Square> moves, Square destination)
+        {
+            var position = board.FindPiece(this);
+            if (destination.IsInBounds() && board.CanTakePiece(position, destination))
+                moves.Add(destination);
             return moves;
         }
     }
