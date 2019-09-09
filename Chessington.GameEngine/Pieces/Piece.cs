@@ -29,8 +29,12 @@ namespace Chessington.GameEngine.Pieces
             Square position = board.FindPiece(this);
             for (int i = 0; i < 8; i++)
             {
-                moves.Add(Square.At(i, position.Col));
-                moves.Add(Square.At(position.Row, i));
+                Square destination = Square.At(i, position.Col);
+                if (board.IsValidLateralMove(position, destination))
+                    moves.Add(destination);
+                destination = Square.At(position.Row, i);
+                if (board.IsValidLateralMove(position, destination))
+                    moves.Add(destination);
             }
             moves.RemoveAll(move => move == position);
             return moves;

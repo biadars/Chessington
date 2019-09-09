@@ -96,5 +96,25 @@ namespace Chessington.GameEngine
             var handler = CurrentPlayerChanged;
             if (handler != null) handler(player);
         }
+
+        public bool IsValidLateralMove(Square from, Square to)
+        {
+            if (from.Row == to.Row)
+            {
+                for (int i = Math.Min(from.Col, to.Col) + 1; i < Math.Max(from.Col, to.Col); i++)
+                    if (GetPiece(Square.At(from.Row, i)) != null)
+                        return false;
+            }
+            else
+            {
+                for (int i = Math.Min(from.Row, from.Row) + 1; i < Math.Max(from.Row, to.Row); i++)
+                {
+                    if (GetPiece(Square.At(i, from.Col)) != null)
+                        return false;
+                }
+            }
+
+            return true;
+        }
     }
 }
