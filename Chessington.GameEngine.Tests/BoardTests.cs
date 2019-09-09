@@ -29,5 +29,27 @@ namespace Chessington.GameEngine.Tests
 
             location.Should().Be(square);
         }
+
+        [Test]
+        public void LateralMoveIsNotValidDiagonalMove()
+        {
+            var board = new Board();
+            var rook = new Rook(Player.White);
+            var square = Square.At(4, 4);
+            board.AddPiece(square, rook);
+            var destination = Square.At(4, 7);
+            board.IsValidDiagonalMove(square, destination).Should().BeFalse();
+        }
+
+        [Test]
+        public void KnightMoveIsNotValidDiagonalMove()
+        {
+            var board = new Board();
+            var knight = new Knight(Player.White);
+            var square = Square.At(4, 4);
+            board.AddPiece(square, knight);
+            var destination = Square.At(6, 5);
+            board.IsValidDiagonalMove(square, destination).Should().BeFalse();
+        }
     }
 }

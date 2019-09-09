@@ -121,7 +121,9 @@ namespace Chessington.GameEngine
                 current != to;
                 current = Square.At(current.Row + x, current.Col + y))
             {
-                if (current.IsInBounds() && GetPiece(current) != null)
+                if (!current.IsInBounds())
+                    return false;
+                if (GetPiece(current) != null)
                     return false;
             }
 
