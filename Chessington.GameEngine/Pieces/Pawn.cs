@@ -8,6 +8,12 @@ namespace Chessington.GameEngine.Pieces
         public Pawn(Player player)
             : base(player) { }
 
+        public override void MoveTo(Board board, Square newSquare)
+        {
+            base.MoveTo(board, newSquare);
+            Moved = true;
+        }
+
         public override IEnumerable<Square> GetAvailableMoves(Board board)
         {
             List < Square > moves = new List<Square>();
