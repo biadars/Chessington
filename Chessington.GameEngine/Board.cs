@@ -69,9 +69,9 @@ namespace Chessington.GameEngine
 
         public static bool InBounds(Square position)
         {
-            if (position.Row < 0 || position.Row > 7)
+            if (position.Row < 0 || position.Row >= GameSettings.BoardSize)
                 return false;
-            if (position.Col < 0 || position.Col > 7)
+            if (position.Col < 0 || position.Col >= GameSettings.BoardSize)
                 return false;
             return true;
         }

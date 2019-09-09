@@ -27,7 +27,7 @@ namespace Chessington.GameEngine.Pieces
         {
             List<Square> moves = new List<Square>();
             Square position = board.FindPiece(this);
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < GameSettings.BoardSize; i++)
             {
                 Square destination = Square.At(i, position.Col);
                 if (board.IsValidLateralMove(position, destination))
@@ -44,9 +44,9 @@ namespace Chessington.GameEngine.Pieces
         {
             List<Square> moves = new List<Square>();
             Square position = board.FindPiece(this);
-            for (int i = -7; i < 8; i++)
+            for (int i = (-1 * GameSettings.BoardSize + 1); i < GameSettings.BoardSize; i++)
                 moves.Add(Square.At(position.Row + i, position.Col + i));
-            for (int i = -7; i < 8; i++)
+            for (int i = (-1 * GameSettings.BoardSize + 1); i < GameSettings.BoardSize; i++)
                 moves.Add(Square.At(position.Row + i, position.Col - i));
             moves.RemoveAll(move => move == position || !Board.InBounds(move));
             return moves;
