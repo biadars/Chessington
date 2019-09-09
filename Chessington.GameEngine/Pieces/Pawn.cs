@@ -20,22 +20,27 @@ namespace Chessington.GameEngine.Pieces
             Square position = board.FindPiece(this);
             if (Player == Player.White)
             {
-                if (board.GetPiece(Square.At(position.Row - 1, position.Col)) == null)
+                Square destination = Square.At(position.Row - 1, position.Col);
+                if (Board.InBounds(destination) && board.GetPiece(destination) == null)
                 {
-                    moves.Add(Square.At(position.Row - 1, position.Col));
-                    if (!Moved && board.GetPiece(Square.At(position.Row - 2, position.Col)) == null)
-                        moves.Add((Square.At(position.Row - 2, position.Col)));
+                    moves.Add(destination);
+                    destination = Square.At(position.Row - 2, position.Col);
+                    if (!Moved && board.GetPiece(destination) == null)
+                        moves.Add((destination));
                 }
             }
             else
             {
-                if (board.GetPiece(Square.At(position.Row + 1, position.Col)) == null)
+                Square destination = Square.At(position.Row + 1, position.Col);
+                if (Board.InBounds(destination) && board.GetPiece(destination) == null)
                 {
-                    moves.Add(Square.At(position.Row + 1, position.Col));
-                    if (!Moved && board.GetPiece(Square.At(position.Row + 2, position.Col)) == null)
-                        moves.Add((Square.At(position.Row + 2, position.Col)));
+                    moves.Add(destination);
+                    destination = Square.At(position.Row + 2, position.Col);
+                    if (!Moved && board.GetPiece(destination) == null)
+                        moves.Add((destination));
                 }
             }
+
             return moves;
         }
     }
