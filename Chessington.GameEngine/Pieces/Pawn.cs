@@ -12,7 +12,7 @@ namespace Chessington.GameEngine.Pieces
         {
             List < Square > moves = new List<Square>();
             Square position = board.FindPiece(this);
-            if (board.CurrentPlayer == Player.White)
+            if (Player == Player.White)
                 moves.Add(Square.At(position.Row - 1, position.Col));
             else
                 moves.Add(Square.At(position.Row + 1, position.Col));
