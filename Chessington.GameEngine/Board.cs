@@ -111,10 +111,13 @@ namespace Chessington.GameEngine
                         return false;
                 }
             }
+
+            if (GetPiece(to) != null && GetPiece(to).Player == GetPiece(from).Player)
+                return false;
             return true;
         }
 
-        public bool isValidDiagonalMove(Square from, Square to)
+        public bool IsValidDiagonalMove(Square from, Square to)
         {
             int x, y;
             if (from.Row <= to.Row)
