@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Chessington.GameEngine.Pieces;
 using FluentAssertions;
 using NUnit.Framework;
@@ -200,6 +201,44 @@ namespace Chessington.GameEngine.Tests.Pieces
 
             moves.Should().NotContain(Square.At(6, 2));
             moves.Should().NotContain(Square.At(6, 4));
+        }
+
+        [Test]
+        public void WhitePawnsCanPerformEnPassant()
+        {
+            var board = new Board(Player.Black);
+            var white = new Pawn(Player.White);
+            var black = new Pawn(Player.Black);
+            var whiteFrom = Square.At(3, 5);
+            var blackFrom = Square.At(1, 6);
+            var whiteTo = Square.At(2, 6);
+            var blackTo = Square.At(3, 6);
+
+            board.AddPiece(whiteFrom, white);
+            board.AddPiece(blackFrom, black);
+
+            black.MoveTo(board, blackTo);
+            var moves = white.GetAvailableMoves(board).ToList();
+            moves.Should().Contain(whiteTo);
+        }
+
+        [Test]
+        public void BlackPawnsCanPerformEnPassant()
+        {
+            var board = new Board();
+            var white = new Pawn(Player.White);
+            var black = new Pawn(Player.Black);
+            var whiteFrom = Square.At(6, 1);
+            var whiteTo = Square.At(4, 1);
+            var blackFrom = Square.At(4, 2);
+            var blackTo = Square.At(5, 1);
+
+            board.AddPiece(whiteFrom, white);
+            board.AddPiece(blackFrom, black);
+
+            white.MoveTo(board, whiteTo);
+            var moves = black.GetAvailableMoves(board).ToList();
+            moves.Should().Contain(blackTo);
         }
     }
 }

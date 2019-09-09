@@ -21,6 +21,11 @@ namespace Chessington.GameEngine.Pieces
             board.MovePiece(currentSquare, newSquare);
         }
 
+        public virtual bool EnablesEnPassant(Board board, Square destination)
+        {
+            return false;
+        }
+
         public IEnumerable<Square> GetLateralMoves(Board board)
         {
             List<Square> moves = new List<Square>();

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Chessington.GameEngine.Pieces
@@ -12,7 +13,8 @@ namespace Chessington.GameEngine.Pieces
 
         public override void MoveTo(Board board, Square newSquare)
         {
-            base.MoveTo(board, newSquare);
+            var currentSquare = board.FindPiece(this);
+            board.MovePiece(currentSquare, newSquare);
             Moved = true;
         }
 

@@ -9,7 +9,9 @@ namespace Chessington.GameEngine
     {
         private readonly Piece[,] board;
         public Player CurrentPlayer { get; private set; }
-        public IList<Piece> CapturedPieces { get; private set; } 
+        public IList<Piece> CapturedPieces { get; private set; }
+        public EnPassantTarget EnPassantTarget { private get; set; }
+        public Piece LastMovedPiece { get; private set; }
 
         public Board()
             : this(Player.White) { }
@@ -51,15 +53,26 @@ namespace Chessington.GameEngine
                 throw new ArgumentException("The supplied piece does not belong to the current player.");
             }
 
+
             //If the space we're moving to is occupied, we need to mark it as captured.
             if (board[to.Row, to.Col] != null)
             {
                 OnPieceCaptured(board[to.Row, to.Col]);
             }
 
+            if (EnPassantTarget?.TargetSquare == to)
+            {
+                OnPieceCaptured(EnPassantTarget.TargetPiece);
+                var square = FindPiece(EnPassantTarget.TargetPiece);
+                board[square.Row, square.Col] = null;
+            }
+
             //Move the piece and set the 'from' square to be empty.
             board[to.Row, to.Col] = board[from.Row, from.Col];
             board[from.Row, from.Col] = null;
+            LastMovedPiece = movingPiece;
+
+            SetEnPassantTarget(movingPiece as Pawn, from, to);
 
             CurrentPlayer = movingPiece.Player == Player.White ? Player.Black : Player.White;
             OnCurrentPlayerChanged(CurrentPlayer);
@@ -103,7 +116,7 @@ namespace Chessington.GameEngine
                 }
             }
 
-            return SquareFreeOrEnemy(from, to);
+            return IsValidDestination(from, to);
         }
 
         public bool IsValidDiagonalMove(Square from, Square to)
@@ -121,29 +134,45 @@ namespace Chessington.GameEngine
                 current != to;
                 current = Square.At(current.Row + x, current.Col + y))
             {
-                if (!current.IsInBounds())
-                    return false;
-                if (GetPiece(current) != null)
+                if (!current.IsInBounds() || GetPiece(current) != null)
                     return false;
             }
 
-            return SquareFreeOrEnemy(from, to);
+            return IsValidDestination(from, to);
         }
 
-        public bool SquareFreeOrEnemy(Square from, Square to)
+        public bool IsValidDestination(Square from, Square to)
         {
-            if (GetPiece(to) != null && GetPiece(to).Player == GetPiece(from).Player)
+            if (!to.IsInBounds() || GetPiece(to) != null && GetPiece(to).Player == GetPiece(from).Player)
                 return false;
             return true;
         }
 
         public bool CanTakePiece(Square from, Square to)
         {
-            if (GetPiece(to) == null)
+            if (GetPiece(to) == null && EnPassantTarget?.TargetSquare != to)
                 return false;
-            if (GetPiece(to).Player == GetPiece(from).Player)
+            if ((GetPiece(to) ?? EnPassantTarget.TargetPiece).Player == GetPiece(from).Player)
                 return false;
             return true;
         }
+
+        public void SetEnPassantTarget(Pawn piece, Square from, Square to)
+        {
+            if (Math.Abs(to.Row - from.Row) == 2 && piece != null)
+            {
+                EnPassantTarget = new EnPassantTarget
+                {
+                    TargetPiece = piece,
+                    TargetSquare = Square.At((to.Row + from.Row) / 2, from.Col)
+                };
+            }
+        }
+    }
+
+    public class EnPassantTarget
+    {
+        public Square TargetSquare;
+        public Pawn TargetPiece;
     }
 }

@@ -20,7 +20,7 @@ namespace Chessington.GameEngine.Pieces
             moves.Add(Square.At(position.Row + 1, position.Col - 2));
             moves.Add(Square.At(position.Row - 1, position.Col - 2));
             moves.Add(Square.At(position.Row - 2, position.Col - 1));
-            moves.RemoveAll(move => !move.IsInBounds() || !board.SquareFreeOrEnemy(position, move));
+            moves.RemoveAll(move => !move.IsInBounds() || !board.IsValidDestination(position, move));
             return moves;
         }
     }
