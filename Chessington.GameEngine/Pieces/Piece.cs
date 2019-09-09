@@ -44,7 +44,7 @@ namespace Chessington.GameEngine.Pieces
                 moves.Add(Square.At(position.Row + i, position.Col + i));
             for (int i = (-1 * GameSettings.BoardSize + 1); i < GameSettings.BoardSize; i++)
                 moves.Add(Square.At(position.Row + i, position.Col - i));
-            moves.RemoveAll(move => move == position || !Board.InBounds(move) || !board.IsValidDiagonalMove(position, move));
+            moves.RemoveAll(move => move == position || !move.IsInBounds() || !board.IsValidDiagonalMove(position, move));
             return moves;
         }
     }

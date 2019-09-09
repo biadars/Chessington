@@ -49,5 +49,14 @@
         {
             return string.Format("Row {0}, Col {1}", Row, Col);
         }
+
+        public bool IsInBounds()
+        {
+            if (Row < 0 || Row >= GameSettings.BoardSize)
+                return false;
+            if (Col < 0 || Col >= GameSettings.BoardSize)
+                return false;
+            return true;
+        }
     }
 }

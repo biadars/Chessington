@@ -65,15 +65,6 @@ namespace Chessington.GameEngine
             OnCurrentPlayerChanged(CurrentPlayer);
         }
 
-        public static bool InBounds(Square position)
-        {
-            if (position.Row < 0 || position.Row >= GameSettings.BoardSize)
-                return false;
-            if (position.Col < 0 || position.Col >= GameSettings.BoardSize)
-                return false;
-            return true;
-        }
-
 
         public delegate void PieceCapturedEventHandler(Piece piece);
         
@@ -130,7 +121,7 @@ namespace Chessington.GameEngine
                 current != to;
                 current = Square.At(current.Row + x, current.Col + y))
             {
-                if (InBounds(current) && GetPiece(current) != null)
+                if (current.IsInBounds() && GetPiece(current) != null)
                     return false;
             }
 

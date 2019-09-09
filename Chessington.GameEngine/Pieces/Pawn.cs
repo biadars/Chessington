@@ -21,14 +21,14 @@ namespace Chessington.GameEngine.Pieces
             if (Player == Player.White)
             {
                 Square destination = Square.At(position.Row - 1, position.Col);
-                if (Board.InBounds(destination) && board.GetPiece(destination) == null)
+                if (destination.IsInBounds() && board.GetPiece(destination) == null)
                 {
                     moves.Add(destination);
                     destination = Square.At(destination.Row, destination.Col - 1);
-                    if (Board.InBounds(destination) && board.CanTakePiece(position, destination))
+                    if (destination.IsInBounds() && board.CanTakePiece(position, destination))
                         moves.Add(destination);
                     destination = Square.At(destination.Row, destination.Col + 2);
-                    if (Board.InBounds(destination) && board.CanTakePiece(position, destination))
+                    if (destination.IsInBounds() && board.CanTakePiece(position, destination))
                         moves.Add(destination);
                     destination = Square.At(position.Row - 2, position.Col);
                     if (!Moved && board.GetPiece(destination) == null)
@@ -38,14 +38,14 @@ namespace Chessington.GameEngine.Pieces
             else
             {
                 Square destination = Square.At(position.Row + 1, position.Col);
-                if (Board.InBounds(destination) && board.GetPiece(destination) == null)
+                if (destination.IsInBounds() && board.GetPiece(destination) == null)
                 {
                     moves.Add(destination);
                     destination = Square.At(destination.Row, destination.Col - 1);
-                    if (Board.InBounds(destination) && board.CanTakePiece(position, destination))
+                    if (destination.IsInBounds() && board.CanTakePiece(position, destination))
                     moves.Add(destination);
                     destination = Square.At(destination.Row, destination.Col + 2);
-                    if (Board.InBounds(destination) && board.CanTakePiece(position, destination))
+                    if (destination.IsInBounds() && board.CanTakePiece(position, destination))
                     moves.Add(destination);
                     destination = Square.At(position.Row + 2, position.Col);
                     if (!Moved && board.GetPiece(destination) == null)
