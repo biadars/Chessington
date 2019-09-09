@@ -5,6 +5,8 @@ namespace Chessington.GameEngine.Pieces
 {
     public class Pawn : Piece
     {
+        public bool Moved { get; set; } = false;
+
         public Pawn(Player player)
             : base(player) { }
 
@@ -17,25 +19,20 @@ namespace Chessington.GameEngine.Pieces
         public override IEnumerable<Square> GetAvailableMoves(Board board)
         {
             var moves = new List<Square>();
-            var position = board.FindPiece(this);
-            int rowModifier;
-            if (Player == Player.White)
-                rowModifier = -1;
-            else
-                rowModifier = 1;
-            var destination = Square.At(position.Row + rowModifier, position.Col);
-            if (destination.IsInBounds())
-            {
-                AddDiagonalMove(board, moves, Square.At(destination.Row, destination.Col - 1));
-                AddDiagonalMove(board, moves, Square.At(destination.Row, destination.Col + 1));
-                if (board.GetPiece(destination) != null)
-                    return moves;
-                moves.Add(destination);
-                destination = Square.At(position.Row + 2 * rowModifier, position.Col);
-                if (!Moved && board.GetPiece(destination) == null)
-                    moves.Add(destination);
-            }
+            var currentPosition = board.FindPiece(this);
+            int rowModifier = GetRowModifier();
+            AddFrontMove(board, moves, currentPosition, rowModifier);
+            AddDoubleFrontMove(board, moves, currentPosition, rowModifier);
+            AddDiagonalMove(board, moves, Square.At(currentPosition.Row + rowModifier, currentPosition.Col - 1));
+            AddDiagonalMove(board, moves, Square.At(currentPosition.Row + rowModifier, currentPosition.Col + 1));
             return moves;
+        }
+
+        private int GetRowModifier()
+        {
+            if (Player == Player.White)
+                return -1;
+            return 1;
         }
 
         private IEnumerable<Square> AddDiagonalMove(Board board, List<Square> moves, Square destination)
@@ -44,6 +41,28 @@ namespace Chessington.GameEngine.Pieces
             if (destination.IsInBounds() && board.CanTakePiece(position, destination))
                 moves.Add(destination);
             return moves;
+        }
+
+        private IEnumerable<Square> AddFrontMove(Board board, List<Square> moves, Square currentPosition, int rowModifier)
+        {
+            var destination = Square.At(currentPosition.Row + rowModifier, currentPosition.Col);
+            if (destination.IsInBounds() && board.GetPiece(destination) == null)
+                moves.Add(destination);
+            return moves;
+        }
+
+        private IEnumerable<Square> AddDoubleFrontMove(Board board, List<Square> moves, Square currentPosition,
+            int rowModifier)
+        {
+            if (Moved)
+                return moves;
+            var destination = Square.At(currentPosition.Row + rowModifier, currentPosition.Col);
+            if (!destination.IsInBounds() || board.GetPiece(destination) != null)
+                return moves;
+            destination = Square.At(destination.Row + rowModifier, destination.Col);
+            if (destination.IsInBounds() && board.GetPiece(destination) == null)
+                moves.Add(destination);
+                return moves;
         }
     }
 }
