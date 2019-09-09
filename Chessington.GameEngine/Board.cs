@@ -135,7 +135,8 @@ namespace Chessington.GameEngine
                 if (InBounds(current) && GetPiece(current) != null)
                     return false;
             }
-
+            if (GetPiece(to) != null && GetPiece(to).Player == GetPiece(from).Player)
+                return false;
             return true;
         }
     }
