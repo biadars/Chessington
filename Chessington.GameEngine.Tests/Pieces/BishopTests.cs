@@ -84,5 +84,14 @@ namespace Chessington.GameEngine.Tests.Pieces
             var moves = bishop.GetAvailableMoves(board);
             moves.Should().NotContain(Square.At(6, 6));
         }
+
+        [Test]
+        public void Bishop_CannotBe_PromotionCandidate()
+        {
+            var board = new Board();
+            var bishop = new Bishop(Player.White);
+            board.AddPiece(Square.At(0, 1), bishop);
+            bishop.IsPromotionCandidate(board).Should().BeFalse();
+        }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace Chessington.GameEngine
+﻿using System.Runtime.InteropServices.WindowsRuntime;
+
+namespace Chessington.GameEngine
 {
     public enum Player
     {

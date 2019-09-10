@@ -116,5 +116,14 @@ namespace Chessington.GameEngine.Tests.Pieces
             var moves = queen.GetAvailableMoves(board);
             moves.Should().NotContain(Square.At(4, 6));
         }
+
+        [Test]
+        public void Queen_CannotBe_PromotionCandidate()
+        {
+            var board = new Board();
+            var queen = new Queen(Player.White);
+            board.AddPiece(Square.At(0, 1), queen);
+            queen.IsPromotionCandidate(board).Should().BeFalse();
+        }
     }
 }

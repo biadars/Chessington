@@ -76,5 +76,14 @@ namespace Chessington.GameEngine.Tests.Pieces
             var moves = king.GetAvailableMoves(board);
             moves.Should().NotContain(Square.At(4, 5));
         }
+
+        [Test]
+        public void King_CannotBe_PromotionCandidate()
+        {
+            var board = new Board();
+            var king = new King(Player.Black);
+            board.AddPiece(Square.At(7, 1), king);
+            king.IsPromotionCandidate(board).Should().BeFalse();
+        }
     }
 }

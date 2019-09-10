@@ -240,5 +240,23 @@ namespace Chessington.GameEngine.Tests.Pieces
             var moves = black.GetAvailableMoves(board).ToList();
             moves.Should().Contain(blackTo);
         }
+
+        [Test]
+        public void WhitePawn_CanBe_PromotionCandidate()
+        {
+            var board = new Board();
+            var pawn = new Pawn(Player.White);
+            board.AddPiece(Square.At(0, 1), pawn);
+            pawn.IsPromotionCandidate(board).Should().BeTrue();
+        }
+
+        [Test]
+        public void BlackPawn_CanBe_PromotionCandidate()
+        {
+            var board = new Board();
+            var pawn = new Pawn(Player.Black);
+            board.AddPiece(Square.At(7, 1), pawn);
+            pawn.IsPromotionCandidate(board).Should().BeTrue();
+        }
     }
 }

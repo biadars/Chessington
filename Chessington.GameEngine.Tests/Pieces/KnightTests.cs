@@ -90,5 +90,14 @@ namespace Chessington.GameEngine.Tests.Pieces
 
             moves.Should().NotContain(Square.At(2, 5));
         }
+
+        [Test]
+        public void Knight_CannotBe_PromotionCandidate()
+        {
+            var board = new Board();
+            var knight = new Knight(Player.White);
+            board.AddPiece(Square.At(0, 1), knight);
+            knight.IsPromotionCandidate(board).Should().BeFalse();
+        }
     }
 }
