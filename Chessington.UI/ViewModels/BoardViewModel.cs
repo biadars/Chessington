@@ -16,12 +16,14 @@ namespace Chessington.UI.ViewModels
         public BoardViewModel()
         {
             Board = new Board();
+            Check = new Check(Board);
             Board.PieceCaptured += BoardOnPieceCaptured;
             Board.CurrentPlayerChanged += BoardOnCurrentPlayerChanged;
             ChessingtonServices.EventAggregator.Subscribe(this);
         }
-        
+
         public Board Board { get; private set; }
+        public Check Check{ get; set; }
 
         public void PiecesMoved()
         {
@@ -62,6 +64,17 @@ namespace Chessington.UI.ViewModels
                 
                 ChessingtonServices.EventAggregator.Publish(new PiecesMoved(Board));
                 ChessingtonServices.EventAggregator.Publish(new SelectionCleared());
+                if (Check.IsInCheck(Player.White))
+                {
+                    var whiteKing = Board.FindPiece(Check.Kings[Player.White]);
+                    ChessingtonServices.EventAggregator.Publish(new CheckNotification(whiteKing));
+                }
+
+                if (Check.IsInCheck(Player.Black))
+                {
+                    var blackKing = Board.FindPiece(Check.Kings[Player.Black]);
+                    ChessingtonServices.EventAggregator.Publish(new CheckNotification(blackKing));
+                }
             }
         }
 

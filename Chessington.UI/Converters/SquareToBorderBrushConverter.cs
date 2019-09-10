@@ -18,6 +18,8 @@ namespace Chessington.UI.Converters
             if (square == null)
                 throw new ArgumentException("This converter is only valid for ChessSquare objects.", "value");
 
+            if (square.InCheck)
+                return new SolidColorBrush(InterfaceSettings.InCheckColor);
             if (square.Selected)
                 return new SolidColorBrush(InterfaceSettings.SelectedSquareColor);
 

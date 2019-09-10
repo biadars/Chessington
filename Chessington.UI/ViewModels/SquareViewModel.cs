@@ -14,12 +14,14 @@ namespace Chessington.UI.ViewModels
         IHandle<PiecesMoved>, 
         IHandle<PieceSelected>, 
         IHandle<ValidMovesUpdated>, 
-        IHandle<SelectionCleared>
+        IHandle<SelectionCleared>,
+        IHandle<CheckNotification>
     {
         private readonly Square square;
 
         private bool selected;
         private bool validMovementTarget;
+        private bool inCheck;
         private BitmapImage image;
 
         public SquareViewModel(Square square)
@@ -30,6 +32,18 @@ namespace Chessington.UI.ViewModels
 
         public Square Location { get { return square; } }
         public SquareViewModel Self { get { return this; } }
+
+        public bool InCheck
+        {
+            get { return inCheck; }
+            set
+            {
+                if (value.Equals(selected)) return;
+                inCheck = value;
+                OnPropertyChanged();
+                OnPropertyChanged("Self");
+            }
+        }
 
         public bool Selected
         {
@@ -83,6 +97,12 @@ namespace Chessington.UI.ViewModels
             }
 
             Image = PieceImageFactory.GetImage(currentPiece);
+        }
+
+        public void Handle(CheckNotification notification)
+        {
+            if (square == notification.Square)
+                InCheck = true;
         }
 
         public void Handle(ValidMovesUpdated message)
