@@ -21,11 +21,6 @@ namespace Chessington.GameEngine.Pieces
             board.MovePiece(currentSquare, newSquare);
         }
 
-        public virtual bool EnablesEnPassant(Board board, Square destination)
-        {
-            return false;
-        }
-
         public IEnumerable<Square> GetLateralMoves(Board board)
         {
             List<Square> moves = new List<Square>();
@@ -49,6 +44,11 @@ namespace Chessington.GameEngine.Pieces
                 moves.Add(Square.At(position.Row + i, position.Col - i));
             moves.RemoveAll(move => move == position || !move.IsInBounds() || !board.IsValidDiagonalMove(position, move));
             return moves;
+        }
+
+        public virtual bool IsPromotionCandidate(Board board)
+        {
+            return false;
         }
     }
 }

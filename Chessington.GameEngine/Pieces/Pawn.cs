@@ -66,5 +66,15 @@ namespace Chessington.GameEngine.Pieces
                 moves.Add(destination);
                 return moves;
         }
+
+        public override bool IsPromotionCandidate(Board board)
+        {
+            var square = board.FindPiece(this);
+            if (Player == Player.White && square.Row == 0)
+                return true;
+            if (square.Row == 7)
+                return true;
+            return false;
+        }
     }
 }

@@ -73,6 +73,7 @@ namespace Chessington.GameEngine
             LastMovedPiece = movingPiece;
 
             SetEnPassantTarget(movingPiece as Pawn, from, to);
+            PerformPromotion(movingPiece, to);
 
             CurrentPlayer = movingPiece.Player == Player.White ? Player.Black : Player.White;
             OnCurrentPlayerChanged(CurrentPlayer);
@@ -166,6 +167,20 @@ namespace Chessington.GameEngine
                     TargetPiece = piece,
                     TargetSquare = Square.At((to.Row + from.Row) / 2, from.Col)
                 };
+            }
+            else
+            {
+                EnPassantTarget = null;
+            }
+        }
+
+        private void PerformPromotion(Piece piece, Square square)
+        {
+            if (piece.IsPromotionCandidate(this))
+            {
+                board[square.Row, square.Col] = null;
+                var queen = new Queen(CurrentPlayer);
+                AddPiece(square, queen);
             }
         }
     }
